@@ -1,0 +1,22 @@
+# Workflow for building pthread stuff.
+name: Build all stuff
+
+on:
+  push:
+    branches:
+      - "**"
+  
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build pthread stuff
+        run: |
+          cd build && g++ -o main ../main.cc -pthread
+          ./main
