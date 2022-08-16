@@ -1,0 +1,13 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+cc_binary(
+    name = "main",
+    srcs = ["main.cc"],
+    linkopts = [
+        "-pthread",
+    ],
+    deps = [
+        # "@com_github_3rdparty_bazel_rules_backward_cpp_stacktrace//:backward-stacktrace",
+        "@com_github_backward_cpp//:backward",
+    ],
+)

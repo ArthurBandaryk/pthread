@@ -1,0 +1,20 @@
+build:linux --cxxopt=-std=c++17
+build:macos --cxxopt=-std=c++17
+
+# Make an existing directory writable in the sandbox in order
+# to prevent build issue on 'make' call from 'configure_make'
+# for 'binutils'.
+# Check bazel doc:
+# https://docs.bazel.build/versions/main/command-line-reference.html
+# Example of this issue:
+# https://stackoverflow.com/questions/52370202/how-to-get-bazel-ccache-and-sandboxing-to-work-together-ccache-read-only-file
+# TODO(artur): find a way to pass '/home/$USER/.cache' as the
+# value to '--sandbox_writable_path' option.
+build:linux --sandbox_writable_path=/home/
+build:macos --sandbox_writable_path=/home/
+
+# Build with clang (rather than the default of gcc) since clang compiles
+# templates faster and produces better error messages.
+# Prefer repo_env over action_env to avoid invalidating the action graph:
+# https://github.com/bazelbuild/bazel/issues/8074
+build --repo_env=CC=clang
