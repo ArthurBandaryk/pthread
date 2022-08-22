@@ -8,15 +8,24 @@ on:
   
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [macos-latest, ubuntu-latest]
+     # The host should always be Linux
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Build pthread stuff
-        run: |
-          cd build && g++ -std=c++17 -o main ../main.cc -pthread
-          ./main
+      - uses: uraimo/run-on-arch-action@v2.1.0
+        name: Run commands
+        id: runcmd
+        with:
+          # arch: aarch64
+          arch: armv7
+          distro: ubuntu20.04
+          run: |
+            uname -a
+            apt-get -qq update
+            apt-get install -y make gcc g++
+            g++ --version
+            cd build && g++ -std=c++17 -o main ../main.cc -pthread
+            ./main
+
